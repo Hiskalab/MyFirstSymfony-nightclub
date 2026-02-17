@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello AdminController!{% endblock %}
+
+{% block body %}
+
+<ul>
+    <li>
+        <a href="{{path('app_article')}}">Article</a>
+    </li>
+    <li>
+        <a href="{{path('app_show')}}">show</a>
+    </li>
+</ul>
+
+<h1>{{ slug }}</1>
+
+{% endblock %}

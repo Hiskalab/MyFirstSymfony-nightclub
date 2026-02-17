@@ -13,9 +13,14 @@ final class AdminController extends AbstractController
     {
         return $this->render('admin/index.html.twig');
     }
-    #[Route('/dashboard', name: 'app_dashboard')]
-    public function dashboard(): Response
+    #[Route('/liste', name: 'app_liste')]
+    public function liste(): Response
     {
-        return $this->render('admin/dashboard.html.twig');
+        return $this->render('admin/liste.html.twig');
+    }
+    #[Route('/parametre', name: 'app_parametre')]
+    public function parametre(): Response
+    {
+        return $this->render('admin/parametre.html.twig');
     }
 }
