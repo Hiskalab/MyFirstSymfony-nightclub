@@ -4,7 +4,14 @@
 
 {% block body %}
 
-<a href="?controller=test&action=contact">Contact</a>
+<ul>
+    <li>
+    <a href="{{path('app_test')}}">Accueil</a>
+    </li>
+    <li>
+    <a href="{{path('contact')}}">Contact</a>
+    </li>
+</ul>
 
 Coucou je suis à propos
 
