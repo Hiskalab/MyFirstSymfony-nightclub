@@ -3,16 +3,26 @@
 {% block title %}Hello TestController!{% endblock %}
 
 {% block body %}
+<body id="hasard">
 
-<ul>
-    <li>
-        <a href="{{path('app_test')}}">Accueil</a>
-    </li>
-    <li>
-        <a href="{{path('propos')}}">A propros</a>
-    </li>
-</ul>
 
-Coucou je suis contact
+<h1>{{ h1 }}</h1>
+
+
+<div {{ stimulus_controller('hello') }}>
+   dans twig
+</div>
+
+<div data-controller="toggle">
+    <button data-action="click->toggle#affiche" class="bg-blue-500 text-white px-4 py-2">
+        Afficher / Masquer
+    </button>
+
+    <div data-toggle-target="content" class="hidden mt-4">
+        <input data-action="click->toggle#color" style="border: solid 3px black;" type="button" id="monBoutton" value="Aléatoire">    
+    </div>
+</div>
+
+</body>
 
 {% endblock %}

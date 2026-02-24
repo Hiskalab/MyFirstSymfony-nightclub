@@ -11,7 +11,11 @@ final class AdminController extends AbstractController
     #[Route('/admin', name: 'app_admin')]
     public function index(): Response
     {
-        return $this->render('admin/index.html.twig');
+        return $this->render('admin/index.html.twig', ['h1' => "Bienvenue au Nightclub Manager", 'navigation' => [
+            ['href' => '/admin', 'caption' => 'Admin'],
+            ['href' => '/liste', 'caption' => 'Liste'],
+            ['href' => '/parametre', 'caption' > 'Parametre']
+        ]]);
     }
     #[Route('/liste', name: 'app_liste')]
     public function liste(): Response

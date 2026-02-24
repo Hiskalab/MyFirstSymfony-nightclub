@@ -1,3 +1,14 @@
+@import "tailwindcss";
+
 body {
-    background-color: skyblue;
+    background-color: pink;
+}
+
+h1 {
+    font-size: 50px;
+}
+
+img {
+    display: flex;
+    align-items: center;
 }

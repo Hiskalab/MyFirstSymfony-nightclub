@@ -4,6 +4,14 @@
 
 {% block body %}
 
+<h1> {{ h1 }} </h1>
+
+<ul>
+{% for item in navigation %}
+    <li><a href="{{ item.href }}">{{ item.caption }}</a></li>
+{% endfor %}
+</ul>
+
 <ul>
     <li>
         <a href="{{path('app_admin')}}">Dashboard</a>
@@ -22,6 +30,5 @@
     </li>
 </ul>
 
-<h1>Dashboard</1>
 
 {% endblock %}

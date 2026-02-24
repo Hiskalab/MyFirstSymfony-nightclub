@@ -4,15 +4,24 @@
 
 {% block body %}
 
+
+<h1>{{ h1 }}</h1>
+
 <ul>
-    <li>
-        <a href="{{path('app_test')}}">Accueil</a>
-    </li>
-    <li>
-        <a href="{{path('contact')}}">Contact</a>
-    </li>
+{% for item in navigation %}
+    <li><a href="{{ item.href }}">{{ item.caption }}</a></li>
+{% endfor %}
 </ul>
 
-Coucou je suis à propos
+<ul>
+{% for dj in djs %}
+  <li>{{ dj.name }}</li>
+{% else %}
+  <li>Aucun DJ prévu</li>
+{% endfor %}
+</ul>
+
+
+
 
 {% endblock %}
