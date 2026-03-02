@@ -2,9 +2,13 @@
 
 namespace App\Controller;
 
+use ContactType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+
 
 final class TestController extends AbstractController
 {
@@ -37,9 +41,22 @@ final class TestController extends AbstractController
         ]);
     }
     #[Route('/contact', name: 'contact')]
-    public function contact(): Response 
+    public function contact(Request $request): Response 
     {
+
+        $form = $this->createForm(ContactType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid())
+
+        $form->handleRequest($request);
+            if ($form->isSubmitted() && $form->isValid()) {
+                $data = $form->getData();
+                dd($data);
+            }
+
         return $this->render('test/contact.html.twig', [
+            'form' => $form,
             'h1' => strtoupper("Bienvenue sur Contact"),
             'navigation' => [
                 ['href' => '/', 'caption' => 'Accueil'],
