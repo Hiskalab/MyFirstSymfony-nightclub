@@ -2,10 +2,13 @@
 
 namespace App\Entity;
 
+use App\Entity\Theme;
 use App\Repository\SoireeRepository;
 use Assert\Length;
-use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: SoireeRepository::class)]
 class Soiree
@@ -33,6 +36,27 @@ class Soiree
 
     #[ORM\Column(nullable: true)]
     private ?\DateTime $dateCreation = null;
+
+    /**
+     * @var Collection<int, Artist>
+     */
+    #[ORM\ManyToMany(targetEntity: Artist::class, inversedBy: 'soirees')]
+    private Collection $artist;
+
+    /**
+     * @var Collection<int, MaterielSoiree>
+     */
+    #[ORM\OneToMany(targetEntity: MaterielSoiree::class, mappedBy: 'soiree')]
+    private Collection $materielSoirees;
+
+    #[ORM\ManyToOne(inversedBy: 'soirees')]
+    private ?Theme $theme = null;
+
+    public function __construct()
+    {
+        $this->artist = new ArrayCollection();
+        $this->materielSoirees = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -83,6 +107,72 @@ class Soiree
     public function setDateCreation(?\DateTime $dateCreation): static
     {
         $this->dateCreation = $dateCreation;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Artist>
+     */
+    public function getArtist(): Collection
+    {
+        return $this->artist;
+    }
+
+    public function addArtist(Artist $artist): static
+    {
+        if (!$this->artist->contains($artist)) {
+            $this->artist->add($artist);
+        }
+
+        return $this;
+    }
+
+    public function removeArtist(Artist $artist): static
+    {
+        $this->artist->removeElement($artist);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, MaterielSoiree>
+     */
+    public function getMaterielSoirees(): Collection
+    {
+        return $this->materielSoirees;
+    }
+
+    public function addMaterielSoiree(MaterielSoiree $materielSoiree): static
+    {
+        if (!$this->materielSoirees->contains($materielSoiree)) {
+            $this->materielSoirees->add($materielSoiree);
+            $materielSoiree->setSoiree($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMaterielSoiree(MaterielSoiree $materielSoiree): static
+    {
+        if ($this->materielSoirees->removeElement($materielSoiree)) {
+            // set the owning side to null (unless already changed)
+            if ($materielSoiree->getSoiree() === $this) {
+                $materielSoiree->setSoiree(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getTheme(): ?Theme
+    {
+        return $this->theme;
+    }
+
+    public function setTheme(?Theme $theme): static
+    {
+        $this->theme = $theme;
 
         return $this;
     }

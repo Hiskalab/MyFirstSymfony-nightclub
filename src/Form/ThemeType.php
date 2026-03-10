@@ -2,29 +2,24 @@
 
 namespace App\Form;
 
-use App\Entity\Artist;
-use App\Entity\Soiree;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use App\Entity\Theme;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class SoireeType extends AbstractType
+class ThemeType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('titre')
-            ->add('description')
-            ->add('dateSoiree')
-            ->add('dateCreation')
-            ;
+            ->add('name')
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Soiree::class,
+            'data_class' => Theme::class,
         ]);
     }
 }

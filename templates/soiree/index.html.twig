@@ -1,6 +1,51 @@
+{% extends 'base.html.twig' %}
 
-{% block title %}Hello SoireeController!{% endblock %}
+{% block title %}Soiree index{% endblock %}
 
 {% block body %}
+    <h1>Soiree index</h1>
 
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Titre</th>
+                <th>Description</th>
+                <th>Theme</th>
+                <th>DateSoiree</th>
+                <th>DateCreation</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for soiree in soirees %}
+            <tr>
+                <td>{{ soiree.id }}</td>
+                <td>
+                {% for xxx in soiree.artist %}
+                    {{ xxx.name }}
+                {% endfor %}
+                </td>
+                <td>{{ soiree.titre }}</td>
+                <td>{{ soiree.description }}</td>
+                {% if (soiree.theme) %}
+                <td>{{ soiree.theme.name }}</td>
+                {% endif %}
+                <td>{{ soiree.dateSoiree ? soiree.dateSoiree|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ soiree.dateCreation ? soiree.dateCreation|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_soiree_show', {'id': soiree.id}) }}" style="color: blue;">show</a>
+                    <a href="{{ path('app_soiree_edit', {'id': soiree.id}) }}" style="color: green;">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_soiree_new') }}">Create new</a>
 {% endblock %}

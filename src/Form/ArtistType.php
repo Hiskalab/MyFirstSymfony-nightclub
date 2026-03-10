@@ -9,22 +9,24 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class SoireeType extends AbstractType
+class ArtistType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('titre')
-            ->add('description')
-            ->add('dateSoiree')
-            ->add('dateCreation')
-            ;
+            ->add('name')
+            ->add('soirees', EntityType::class, [
+                'class' => Soiree::class,
+                'choice_label' => 'id',
+                'multiple' => true,
+            ])
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Soiree::class,
+            'data_class' => Artist::class,
         ]);
     }
 }

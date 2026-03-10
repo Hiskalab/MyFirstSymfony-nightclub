@@ -3,64 +3,106 @@
 namespace App\Controller;
 
 use App\Entity\Soiree;
-use App\Form\SoireeType;
+use App\Entity\Theme;
+use App\Form\Soiree1Type;
 use App\Repository\SoireeRepository;
-use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-
-
+#[Route('/soiree')]
 final class SoireeController extends AbstractController
 {
-    #[Route('/soiree', name: 'app_soiree')]
-    function index(SoireeRepository $soireeRepository) {
-        $soiree = $soireeRepository->findAll();
-        dd($soiree);
-    }
-
-    #[Route('/soiree/{id}/update', name: 'update_soiree')]
-    function update(EntityManagerInterface $em, int $id) {
-        $repository = $em->getRepository(Soiree::class);
-        $soireeUpdate = $repository->find($id);
-        $soireeUpdate->setTitre("Soiree tech $id");
-        $em->flush();
-        dd($soireeUpdate);
-    }
-
-    #[Route('/soiree/{id}/delete', name: 'delete_soiree')]
-    function delete_soiree(EntityManagerInterface $em, int $id) {
-        $repository = $em->getRepository(Soiree::class);
-        $soiree = $repository->find($id);
-        $em->remove($soiree);
-        $em->flush();
-        return $this->redirectToRoute('app_soiree');
-    }
-    
-    #[Route('/soiree/creer', name: 'creer_soiree')]
-    function creerSoiree(EntityManagerInterface $em, Request $request): Response
+    #[Route(name: 'app_soiree_index', methods: ['GET'])]
+    public function index(SoireeRepository $soireeRepository): Response
     {
-        $soiree = new Soiree();
-        $form = $this->createForm(SoireeType::class, $soiree, [
-            'attr' => ['novalidate' => 'novalidate']
-        ]);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em->persist($soiree);
-            $em->flush();
-            return $this->redirectToRoute('app_soiree');
-        }
-        return $this->render('soiree/creer.html.twig', [
-            'form' => $form->createView(),
+        return $this->render('soiree/index.html.twig', [
+            'soirees' => $soireeRepository->findAll(),
             'h1' => strtoupper("Bienvenue sur Contact"),
             'navigation' => [
                 ['href' => '/', 'caption' => 'Accueil'],
-                ['href' => '/propos', 'caption' => 'A propos'],
-                ['href' => '/contact', 'caption' => 'Contact']
+                ['href' => '/soiree', 'caption' => 'Soiree'],
+                ['href' => '/artist', 'caption' => 'Artist']
             ]
         ]);
+    }
+
+    #[Route('/new', name: 'app_soiree_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $soiree = new Soiree();
+        $form = $this->createForm(Soiree1Type::class, $soiree);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($soiree);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_soiree_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('soiree/new.html.twig', [
+            'soiree' => $soiree,
+            'form' => $form,
+            'h1' => strtoupper("Bienvenue sur Contact"),
+            'navigation' => [
+                ['href' => '/', 'caption' => 'Accueil'],
+                ['href' => '/soiree', 'caption' => 'Soiree'],
+                ['href' => '/artist', 'caption' => 'Artist']
+            ]
+        ]);
+    }
+
+    #[Route('/{id}', name: 'app_soiree_show', methods: ['GET'])]
+    public function show(Soiree $soiree): Response
+    {
+        return $this->render('soiree/show.html.twig', [
+            'soiree' => $soiree,
+            'h1' => strtoupper("Bienvenue sur Contact"),
+            'navigation' => [
+                ['href' => '/', 'caption' => 'Accueil'],
+                ['href' => '/soiree', 'caption' => 'Soiree'],
+                ['href' => '/artist', 'caption' => 'Artist'],
+                ['href' => '/materiel/soiree', 'caption' => 'Materiel']
+            ]
+        ]);
+    }
+
+    #[Route('/{id}/edit', name: 'app_soiree_edit', methods: ['GET', 'POST'])]
+    public function edit(Request $request, Soiree $soiree, EntityManagerInterface $entityManager): Response
+    {
+        $form = $this->createForm(Soiree1Type::class, $soiree);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_soiree_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('soiree/edit.html.twig', [
+            'soiree' => $soiree,
+            'form' => $form,
+            'h1' => strtoupper("Bienvenue sur Contact"),
+            'navigation' => [
+                ['href' => '/', 'caption' => 'Accueil'],
+                ['href' => '/soiree', 'caption' => 'Soiree'],
+                ['href' => '/artist', 'caption' => 'Artist'],
+                ['href' => '/materiel/soiree', 'caption' => 'Materiel']
+            ]
+        ]);
+    }
+
+    #[Route('/{id}', name: 'app_soiree_delete', methods: ['POST'])]
+    public function delete(Request $request, Soiree $soiree, EntityManagerInterface $entityManager): Response
+    {
+        if ($this->isCsrfTokenValid('delete'.$soiree->getId(), $request->getPayload()->getString('_token'))) {
+            $entityManager->remove($soiree);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('app_soiree_index', [], Response::HTTP_SEE_OTHER);
     }
 }

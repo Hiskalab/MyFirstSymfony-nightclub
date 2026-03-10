@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}MaterielSoiree index{% endblock %}
+
+{% block body %}
+    <h1>MaterielSoiree index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>DateReservation</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for materiel_soiree in materiel_soirees %}
+            <tr>
+                <td>{{ materiel_soiree.id }}</td>
+                <td>{{ materiel_soiree.dateReservation ? materiel_soiree.dateReservation|date('Y-m-d') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_materiel_soiree_show', {'id': materiel_soiree.id}) }}">show</a>
+                    <a href="{{ path('app_materiel_soiree_edit', {'id': materiel_soiree.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_materiel_soiree_new') }}">Create new</a>
+{% endblock %}
